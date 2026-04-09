@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "guardians"
+version = "2.0.0a1"
+description = "Generate-then-verify-then-execute for AI agent workflows"
+requires-python = ">=3.11"
+dependencies = [
+  "pydantic>=2.0",
+  "z3-solver>=4.12",
+]
+
+[project.optional-dependencies]
+llm = ["litellm"]
+research = ["httpx", "trafilatura"]
+dev = ["pytest>=7.0", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
