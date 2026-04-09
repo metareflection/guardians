@@ -1,9 +1,8 @@
 # Design
 
 This document describes the architecture of Guardians, an
-implementation of the ideas in Erik Meijer's "Guardians of the
-Agents: Formal Verification of AI Workflows" (Communications of the
-ACM, January 2026).
+implementation of the ideas in
+[Erik Meijer's "Guardians of the Agents: Formal Verification of AI Workflows" (Communications of the ACM, January 2026)](https://cacm.acm.org/practice/guardians-of-the-agents/).
 
 ## The problem
 
