@@ -3,7 +3,7 @@
 Static verification for AI agent workflows.
 
 An implementation of the ideas in Erik Meijer's
-["Guardians of the Agents"](https://dl.acm.org/doi/10.1145/3777544)
+["Guardians of the Agents"]([https://dl.acm.org/doi/10.1145/3777544](https://cacm.acm.org/practice/guardians-of-the-agents/))
 (CACM, January 2026). The paper's thesis: the root cause of prompt
 injection in agentic systems is the same as SQL injection — code and
 data aren't separated. The fix is the same too.
