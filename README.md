@@ -1,12 +1,30 @@
 # Guardians
 
-Generate → Verify → Execute for AI agent workflows.
+Static verification for AI agent workflows.
 
-An LLM generates a structured workflow using symbolic references instead of
-raw data. A static verifier checks the workflow against a declarative security
-policy. Only verified workflows are executed.
+An implementation of the ideas in Erik Meijer's
+["Guardians of the Agents"](https://dl.acm.org/doi/10.1145/3777544)
+(CACM, January 2026). The paper's thesis: the root cause of prompt
+injection in agentic systems is the same as SQL injection — code and
+data aren't separated. The fix is the same too.
 
-## Core concepts
+Instead of letting the LLM call tools one at a time and decide what
+to do after each result, the LLM generates a structured plan upfront
+using symbolic references (placeholders, not real data). A static
+verifier checks the plan against a security policy before any tool
+runs. Only verified plans execute.
+
+The verifier uses three independent checks: taint analysis (does
+data flow from a source to a forbidden sink?), security automata
+(does the tool-call sequence reach an error state?), and Z3 theorem
+proving (do preconditions and frame conditions hold?).
+
+The demo scenario from the paper: you ask your AI to summarize your
+inbox. A malicious email tells the agent to forward everything to
+the attacker. Three checks fire. The workflow never executes.
+
+~1900 lines of core, 100 tests, two dependencies (pydantic,
+z3-solver). No LLM calls needed for verification. Python 3.11+.
 
 ```
 Workflow AST ──→ verify(wf, policy, registry) ──→ WorkflowExecutor.run(wf)
@@ -14,20 +32,6 @@ Workflow AST ──→ verify(wf, policy, registry) ──→ WorkflowExecutor.r
                   VerificationResult              env, trace (results)
                   (violations, warnings)
 ```
-
-**Workflow** — a structured AST of tool calls, conditionals, and loops.
-Arguments use `SymRef("var")` instead of concrete data.
-
-**Policy** — declares allowed tools, taint rules, and security automata.
-
-**ToolRegistry** — maps tool names to formal specs (pre/post/frame conditions,
-taint labels) and implementations.
-
-**Verifier** — static analysis: scope checking, taint tracking, Z3 condition
-checking, and automaton simulation. Runs before any tool executes.
-
-**Executor** — runs the workflow, enforcing runtime checks (preconditions,
-postconditions, automata, budgets).
 
 ## Install
 
