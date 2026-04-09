@@ -9,7 +9,7 @@ import json
 from typing import Protocol
 
 from ..policy import Policy
-from ..results import VerificationResult
+from ..results import VerificationResult, Violation
 from ..tools import ToolRegistry
 from ..verify import verify
 from ..workflow import Workflow
@@ -54,7 +54,17 @@ def verified_generate(
                 f"You MUST fix these issues."
             )
 
-        workflow = planner.generate(current_goal, registry, policy)
+        try:
+            workflow = planner.generate(current_goal, registry, policy)
+        except Exception as exc:
+            result = VerificationResult()
+            result.add(Violation(
+                category="generation",
+                message=f"Planner failed: {exc}",
+                step_label="",
+            ))
+            continue
+
         result = verify(workflow, policy, registry)
         if result.ok:
             return workflow, result
