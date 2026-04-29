@@ -36,8 +36,8 @@ Workflow AST ──→ verify(wf, policy, registry) ──→ WorkflowExecutor.r
 ## Install
 
 ```bash
-pip install guardians            # core only (pydantic + z3-solver)
-pip install guardians[llm]       # adds litellm for LLM planning
+pip install -e .            # core only (pydantic + z3-solver)
+pip install -e ".[llm]"     # adds litellm for LLM planning
 ```
 
 ## Quick start
