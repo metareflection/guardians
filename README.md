@@ -157,6 +157,22 @@ result = agent.run("Summarize my inbox")
 
 Adapters live under `guardians.adapters` and are never imported by the core.
 
+## Examples
+
+Runnable scripts in `examples/`:
+
+```bash
+python examples/email_agent.py     # verify/execute pipeline; the paper's demo
+python examples/guarded_agent.py   # decorator API + sanitizer escape hatch
+python examples/llm_planning.py    # a live LLM plans; the verifier gates it
+```
+
+`llm_planning.py` needs the `[llm]` extra and Bedrock credentials. It shows a
+real LLM planning two goals: a benign one is verified and executed, while a
+benign-*sounding* request to forward inbox data offsite produces a sending
+plan that the verifier rejects (taint + domain) — and no retry gets it past
+the verifier, so nothing is sent. Override the model with `GUARDIANS_MODEL`.
+
 ## Project layout
 
 ```
