@@ -23,7 +23,7 @@ The demo scenario from the paper: you ask your AI to summarize your
 inbox. A malicious email tells the agent to forward everything to
 the attacker. Three checks fire. The workflow never executes.
 
-~1900 lines of core, 100 tests, two dependencies (pydantic,
+~1900 lines of core, 130 tests, two dependencies (pydantic,
 z3-solver). No LLM calls needed for verification. Python 3.11+.
 
 ```
@@ -39,6 +39,27 @@ Workflow AST ──→ verify(wf, policy, registry) ──→ WorkflowExecutor.r
 pip install -e .            # core only (pydantic + z3-solver)
 pip install -e ".[llm]"     # adds litellm for LLM planning
 ```
+
+## Running tests
+
+Install the dev extras, then run pytest from the repo root. There is no
+`pytest` on the PATH, so invoke it as `python3 -m pytest`.
+
+```bash
+pip install -e ".[dev]"           # pytest + ruff
+python3 -m pytest                    # all 130 tests
+
+python3 -m pytest tests/core         # core only (115)
+python3 -m pytest tests/adapters     # LLM agent + planner (11)
+python3 -m pytest tests/integration  # end-to-end scenarios (4)
+python3 -m pytest -v                 # verbose, per-test output
+```
+
+| Directory | Tests | Covers |
+|---|---|---|
+| `tests/core` | 115 | Workflow AST, verifier (taint/automata/Z3), executor, conditions, safe-eval, scope, loop fixpoint |
+| `tests/adapters` | 11 | `GuardedAgent` and the planner — requires the `.[llm]` extra (`litellm`) |
+| `tests/integration` | 4 | Full verify→execute pipeline on the paper's email prompt-injection demo (`examples/email_agent.py`) |
 
 ## Quick start
 
