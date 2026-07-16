@@ -89,7 +89,7 @@ if __name__ == "__main__":
     print("=== Safe workflow (read → transform → write) ===")
     result = agent.run_workflow(safe_wf)
     print(f"Trace: {[t['tool'] for t in result.trace]}")
-    print(f"OK\n")
+    print("OK\n")
 
     print("=== Unsafe workflow (read → write, no transform) ===")
     try:
